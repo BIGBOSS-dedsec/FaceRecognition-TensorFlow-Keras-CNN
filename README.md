@@ -611,5 +611,3 @@ cap.release()
 cv2.destroyAllWindows()
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/84606ce783494c70a456615c2430196a.png)
-# 项目地址
- **本篇项目开源地址（待优化）：** GitHub
