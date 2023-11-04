@@ -1,21 +1,9 @@
+# TensorFlow+Keras deep learning based on CNN Convolutional neural network builds face model and recognizes
+# Foreword
 
-# 基于CNN卷积神经网络的TensorFlow+Keras深度学习搭建人脸模型并识别
-# 前言
-之前的博客做了几个简单人脸识别的项目（人脸识别考勤与门禁）：
-1. [树莓派4B爽上流安装python3的OpenCV（人脸检测识别—门禁 “人脸识别篇”)](https://blog.csdn.net/weixin_50679163/article/details/110227418)
-2. [Python+OpenCV人脸识别签到考勤系统（新手入门）](https://blog.csdn.net/weixin_50679163/article/details/124310679)
-
-之前项目中的人脸识别是仅基于OpenCV利用**FaceRecognition+Dlib**来实现的；其原理是利用现成的**hard分类器**和**LBP算法**来进行人脸检测，并收集人脸数据训练人脸数据集（xml）实现人脸识别；
-![在这里插入图片描述](https://img-blog.csdnimg.cn/d717cb9f6e3c4bec8c2c71e9fbbeb19f.png)
-上述的人脸识别方法缺点：**识别率低，错误率较高**（*同条件下与TensorFlow深度训练后对照*）
-所以基于上述的问题，本项目使用OpenCV基于**CNN卷积神经网络+TensorFlow+Keras**来搭建人脸识别模型，来**提高识别效率**和**准确度**；*（当然模型的准确率与训练次数成正比）*
-
-### 补充
-本项目使用**TensorFlow-GPU**进行训练：需要提前搭建好**CUDA环境**具体可以参考本文：[TensorFlow-GPU-2.4.1与CUDA安装教程](https://blog.csdn.net/weixin_50679163/article/details/124395836?spm=1001.2014.3001.5502)
-## 项目实现效果
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/84606ce783494c70a456615c2430196a.png)
-**PS：项目地址在最后会开源**
-### 模型数据
+
+### Model data
 #### VGG16
 ```bash
 Model: "vgg16"
@@ -94,37 +82,37 @@ Non-trainable params: 0
 __________________________________________________________________________________________________
 None
 ```
-# 项目概述
-## 项目运行流程
-**1. 收集人脸数据—Labelme制作数据标签**
+# Project Overview
+## Project operation process
+**1. Collect face data - Labelme makes data labels **
 *FaceCollection.py*
-**2. 深度训练人脸数据——CNN卷积神经网络+TensorFlow+Keras**
+**2. Deep training face data -- CNN Convolutional Neural Network +TensorFlow+Keras**
 *FaceTFTrain.py*
-**3. 人脸检测与识别——OpenCV**
+**3. Face detection and recognition -- OpenCV**
 *Face Recognition.py*
-## 核心环境配置
+## Core environment configuration
 **Python == 3.9.0
 labelme == 5.0.1
-tensorflow -gpu == 2.7.0 （CUDA11.2）
+tensorflow-gpu == 2.7.0 (CUDA11.2)
 opencv-python == 4.0.1
 matplotlib == 3.5.1
 albumentations == 0.7.12**
-# 项目核心代码详解
-## 目录
+# Project core code details
+## Directory
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/b2c3bb1431024c4fa1adf30b15a49f35.png)
 
-|名称|用途  |
+|Name|Use  |
 |--|--|
-| data | 收集的人脸数据 |
-| data-images | 人脸数据 |
-|aug_data  |扩大数据集  |
-| data-labels  |人脸数据标签  |
-| logs | 训练日志 |
-|.h5  | 已训练好的人脸模型（.h5） |
-|FaceCollection.py  | 收集人脸数据 |
-|FaceTFTrain.py | 深度训练人脸数据 |
-|Face Recognition.py  | 人脸检测 |
-## 收集人脸数据—Labelme制作数据标签*FaceCollection.py*
+| data | Collected face data |
+| data-images | Face data |
+|aug_data  |Expanded data set  |
+| data-labels  |Face data tag  |
+| logs | Training log |
+|.h5  | Trained face models（.h5） |
+|FaceCollection.py  | Collect face data |
+|FaceTFTrain.py | Deep training face data |
+|Face Recognition.py  | Face detection |
+## Collect face data - Labelme makes data tags *FaceCollection.py*
 
 ```python
 IMAGES_PATH = os.path.join('data','images')		# 文件路径
@@ -144,16 +132,16 @@ for imgnum in range(number_images):
 cap.release()
 cv2.destroyAllWindows()
 ```
-收集后的数据集（例）：
+The collected data set (example) :
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/73567a4fc5b6477cb16147c447e97b7a.png)
-## 使用LabelMe对图像进行切割并标签
-设定好图像路径和标签路径，需要对每一张收集的数据进行一次标签制作：
+## Images are cut and labeled using LabelMe
+To set the image path and label path, it is necessary to make a label for each piece of collected data:
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/c02eb905a3b84cc6bf045e2bed923e7b.png)
-生成好的Label信息：
+Generated Label information:
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/9c0a46d9ba3149d6a4e757d1596cf057.png)
-#  深度训练人脸数据—CNN卷积神经网络+TensorFlow+Keras
-建议本项目使用**TensorFlow-GPU**进行训练：需要提前搭建好**CUDA环境**具体可以参考本文：[TensorFlow-GPU-2.4.1与CUDA安装教程](https://blog.csdn.net/weixin_50679163/article/details/124395836?spm=1001.2014.3001.5502)
-### 使用TFtest.py检测CUDA是否配置成功
+# Deep training face data - CNN Convolutional Neural Network +TensorFlow+Keras
+
+Use TFtest.py to check whether CUDA is configured successfully
 
 ```python
 # Coding BIGBOSSyifi
@@ -176,12 +164,12 @@ sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_pl
 sess.run(tf.global_variables_initializer())
 print(sess.run(c))
 ```
-出现显卡的信息就没问题了：
+
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/5761d6bc21854f799856f7b17c0dec37.png)
-## 查看数据集并构建图像加载功能
-### GPU内存极限增长限制
+## View data sets and build image loading capabilities
+### GPU memory limit growth limit
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/4fe83fea4a5240a3a9f3258246454352.png)
-## 将图像载入到TensorFlow的数据Pipeline
+## Load the image into TensorFlow's data Pipeline
 
 ```python
 images = tf.data.Dataset.list_files('data\\images\\*.jpg')
@@ -192,8 +180,8 @@ def load_image(x):
     img = tf.io.decode_jpeg(byte_img)
     return img
 ```
-# 数据分类
-## 手动将数据SPLT到训练测试和VAL—移动匹配的标签
+# Data classification
+## Manually SPLT the data into the training test and VAL - move the matching labels
 
 ```python
 for folder in ['train','test','val']:
@@ -205,8 +193,8 @@ for folder in ['train','test','val']:
             new_filepath = os.path.join('data',folder,'labels',filename)
             os.replace(existing_filepath, new_filepath)      
 ```
-# 匹配图像和标签
-## 建立Albumentations图像通道
+# Match images and tags
+## Create an Albumentations image channel
 
 ```python
 augmentor = alb.Compose([alb.RandomCrop(width=450, height=450), 
@@ -218,14 +206,14 @@ augmentor = alb.Compose([alb.RandomCrop(width=450, height=450),
                        bbox_params=alb.BboxParams(format='albumentations', 
                                                   label_fields=['class_labels']))
 ```
-## 用OpenCV和JSON加载图像与标签
+## Load images and tags with OpenCV and JSON
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/b517f1137a124edfbddd5b8039be4746.png)
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/e8ffc84a210d46d38d0b989c8ce38dc5.png)
-## 提取坐标并重新缩放以匹配图像分辨率
+## Extract coordinates and rescale to match image resolution
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/85d85e43de664e1e8a6eb5e4305c0142.png)
-## Augmentation 图像处理
+## Augmentation image processing
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/66f9d866eab2468c8f1fb8c0aa49aa37.png)
-## 搭建运行Augmentation Pipeline
+## Build and run Augmentation Pipeline
 
 ```python
 for partition in ['train','test','val']: 
@@ -270,7 +258,7 @@ for partition in ['train','test','val']:
         except Exception as e:
             print(e)
 ```
-## 加载 Tensorflow数据集
+## Load the Tensorflow dataset
 
 ```python
 train_images = tf.data.Dataset.list_files('aug_data\\train\\images\\*.jpg', shuffle=False)
@@ -288,7 +276,7 @@ val_images = val_images.map(load_image)
 val_images = val_images.map(lambda x: tf.image.resize(x, (120,120)))
 val_images = val_images.map(lambda x: x/255)
 ```
-**加载的信息**
+** Loaded information **
 
 ```bash
 array([[[0.36519608, 0.45735294, 0.5421569 ],
@@ -341,8 +329,8 @@ array([[[0.36519608, 0.45735294, 0.5421569 ],
         [0.05055147, 0.05147059, 0.09001225],
         [0.05349265, 0.05196078, 0.08333334]]], dtype=float32)
 ```
-# 预处理Labels标签
-## 运行构建标签转换方法
+# Preprocess Labels
+## Run the Build tag conversion method
 ```python
 def load_labels(label_path):
     with open(label_path.numpy(), 'r', encoding = "utf-8") as f:
@@ -350,7 +338,7 @@ def load_labels(label_path):
         
     return [label['class']], label['bbox']
 ```
-## 加载标签信息到Tensorflow数据集
+## Load label information into the Tensorflow dataset
 ```python
 train_labels = tf.data.Dataset.list_files('aug_data\\train\\labels\\*.json', shuffle=False)
 train_labels = train_labels.map(lambda x: tf.py_function(load_labels, [x], [tf.uint8, tf.float16]))
@@ -361,14 +349,14 @@ test_labels = test_labels.map(lambda x: tf.py_function(load_labels, [x], [tf.uin
 val_labels = tf.data.Dataset.list_files('aug_data\\val\\labels\\*.json', shuffle=False)
 val_labels = val_labels.map(lambda x: tf.py_function(load_labels, [x], [tf.uint8, tf.float16]))
 ```
-**加载的信息：**
+** Loaded information: **
 
 ```bash
 (array([1], dtype=uint8),
  array([0.5127, 0.4956, 0.8286, 0.943 ], dtype=float16))
 ```
-# 将标签和图像样本匹配
-**处理配对后：**
+# Match the tag to the image sample
+** After processing pairing: **
 ```bash
 (array([[1],
         [1],
@@ -388,7 +376,7 @@ val_labels = val_labels.map(lambda x: tf.py_function(load_labels, [x], [tf.uint8
         [0.1937 , 0.2764 , 0.512  , 0.613  ]], dtype=float16))
 
 ```
-## 数据集采样测试
+## Data set sampling test
 
 ```python
 data_samples = train.as_numpy_iterator()
@@ -407,8 +395,8 @@ for idx in range(4):
     ax[idx].imshow(sample_image)
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/c6defc053c07420884ffe3d07226af64.png)
-# 搭建神经网络
-## Layers和基础神经网络和VGG16神经网络
+# Build neural network
+## Layers and basic neural networks and VGG16 neural networks
 
 ```python
 from tensorflow.keras.models import Model
@@ -417,7 +405,7 @@ from tensorflow.keras.applications import VGG16
 
 vgg = VGG16(include_top=False)
 ```
-## 构建神经网络实例
+## Build neural network examples
 ```python
 def build_model(): 
     input_layer = Input(shape=(120,120,3))
@@ -437,7 +425,7 @@ def build_model():
     facetracker = Model(inputs=input_layer, outputs=[class2, regress2])
     return facetracker
 ```
-# 定义损失和优化
+# Define losses and optimizations
 
 ```python
 batches_per_epoch = len(train)
@@ -461,7 +449,7 @@ def localization_loss(y_true, yhat):
 classloss = tf.keras.losses.BinaryCrossentropy()
 regressloss = localization_loss
 ```
-# 训练数据
+# Training data
 
 ```python
 class FaceTracker(Model): 
@@ -516,7 +504,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=logdir)
 hist = model.fit(train, epochs=3000, validation_data=val, callbacks=[tensorboard_callback])
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/a87e1754455740f7b93b8912a3d64d8c.png)
-## 利用Plot查看数据
+## Use Plot to view data
 
 ```python
 fig, ax = plt.subplots(ncols=3, figsize=(20,5))
@@ -539,7 +527,7 @@ ax[2].legend()
 plt.show()
 ```
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/e78dd69ff20247ca9c13e67cbb69433f.png)
-## 模型预测与测试
+## Model prediction and testing
 
 ```python
 test_data = test.as_numpy_iterator()
@@ -560,17 +548,17 @@ for idx in range(4):
     ax[idx].imshow(sample_image)
 ```
 
-###  保存模型
+### Save the model
 
 ```python
 facetracker.save('facetracker.h5')
 ```
-# 人脸检测与识别——OpenCV
-## 加载模型
+# Face detection and recognition -- OpenCV
+## Load model
 ```python
 facetracker = load_model('facetracker.h5') #加载模型
 ```
-## 实时检测
+
 
 ```python
 cap = cv2.VideoCapture(0)
